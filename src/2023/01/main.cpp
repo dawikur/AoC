@@ -2,37 +2,28 @@
 
 #include <chrono>
 
-#include <fstream>
 #include <iostream>
 #include <limits>
 #include <string>
 #include <tuple>
 #include <vector>
 
-#include <aod/config.hpp>
-
-std::vector<std::string> read_file (std::ifstream input)
-{
-	std::vector<std::string> lines;
-	std::string              line;
-	while (std::getline (input, line)) { lines.push_back (line); }
-	return lines;
-}
-
-std::array<std::string_view, 10> digits = {"zero",
-										   "one",
-										   "two",
-										   "three",
-										   "four",
-										   "five",
-										   "six",
-										   "seven",
-										   "eight",
-										   "nine"};
+#include "aod/config.hpp"
+#include "aod/file.hpp"
 
 int solve_naive (std::vector<std::string> const& lines)
 {
-	int result = 0;
+	std::array<std::string_view, 10> digits = {"zero",
+											   "one",
+											   "two",
+											   "three",
+											   "four",
+											   "five",
+											   "six",
+											   "seven",
+											   "eight",
+											   "nine"};
+	int                              result = 0;
 
 	for (auto const& line: lines) {
 		{
@@ -85,28 +76,22 @@ int solve_naive (std::vector<std::string> const& lines)
 	return result;
 }
 
-int main (int argc, char** argv)
+int main ()
 {
-	if (argc < 2) {
-		std::cerr << "Usage: " << argv [0] << " <input file>" << std::endl;
-		return 1;
+	auto const lines = aod::read_input (__FILE__);
+
+	{
+		auto const begin    = std::chrono::steady_clock::now ();
+		int const  solution = solve_naive (lines);
+		auto const end      = std::chrono::steady_clock::now ();
+
+		std::cout << "[Naive]\nElapsed time: "
+				  << std::chrono::duration_cast<std::chrono::microseconds> (
+						 end - begin)
+						 .count ()
+				  << "µs" << std::endl;
+		std::cout << "      Answer: " << solution << std::endl;
 	}
-
-	auto const lines = read_file (std::ifstream {argv [1]});
-
-	std::chrono::steady_clock::time_point const begin
-		= std::chrono::steady_clock::now ();
-	int const                                   solution = solve_naive (lines);
-	std::chrono::steady_clock::time_point const end
-		= std::chrono::steady_clock::now ();
-
-	std::cout << "[Naive] Elapsed time: "
-			  << std::chrono::duration_cast<std::chrono::microseconds> (end
-																		- begin)
-					 .count ()
-			  << "µs" << std::endl;
-
-	std::cout << "Answer: " << solution << std::endl;
 
 	return 0;
 }
