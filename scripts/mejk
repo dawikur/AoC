@@ -34,7 +34,7 @@ T = TypeVar("T")
 
 
 def parse_arguments(
-    argv: list[str], executables: list[str]
+    argv: list[str], executables: dict[str, list[str]]
 ) -> tuple[argparse.Namespace, list[str]]:
     parser = argparse.ArgumentParser(
         description="Wrapper for cmake", formatter_class=argparse.RawTextHelpFormatter
@@ -42,19 +42,24 @@ def parse_arguments(
 
     commands = parser.add_subparsers(title="commands", metavar="")
 
-    # apps
-    for index, executable in enumerate(executables):
+    # years
+    for index, year in enumerate(executables):
         PADDING = f"\n\n" if index == len(executables) - 1 else ""
 
         def func(name: str) -> Callable[..., Any]:
             return lambda args, kwargs: app(name, args, kwargs)
 
-        # app
-        command_app = commands.add_parser(
-            executable, help=f"run {executable} app{PADDING}", add_help=False
+        # year
+        year_app = commands.add_parser(
+            year, help=f"year {year}{PADDING}", add_help=False
         )
-        if command_app:
-            command_app.set_defaults(func=func(executable))
+        if year_app:
+            year_app.set_defaults(func=func(year))
+
+            year_app.add_argument(
+                "day",
+                choices=executables[year],
+            )
 
     # build
     command_build = commands.add_parser(
@@ -288,6 +293,7 @@ def app(
     executable: str, arguments: argparse.Namespace, remained_args: list[str]
 ) -> int:
     try:
+        executable = f"{executable}_{arguments.day}"
         apps = get_apps()
         app = [app for app in apps if app.parts[-1] == executable][0]
 
@@ -450,7 +456,9 @@ def evaluate(config: Config | None, remained_args: list[str]) -> int:
 
     print(config)
 
-    build(config, remained_args)
+    return_code = build(config, remained_args)
+    if return_code != 0:
+        return return_code
 
     if config["tests"]:
         test(config)
@@ -465,7 +473,7 @@ def evaluate(config: Config | None, remained_args: list[str]) -> int:
 
 
 @tag_func
-def build(config: Config, remained_args: list[str]) -> None:
+def build(config: Config, remained_args: list[str]) -> int:
     env = {"CLICOLOR_FORCE": "1", **config["env"], **os.environ}
 
     cmd = [
@@ -480,60 +488,66 @@ def build(config: Config, remained_args: list[str]) -> None:
     print(f" {colored(cmd[0], 'green')} {' '.join(cmd[1:])}")
 
     return_code = 0
-    with subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        bufsize=1,
-        text=True,
-        env=env,
-    ) as process:
-        ANSI_RE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    try:
+        with subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+            text=True,
+            env=env,
+        ) as process:
+            ANSI_RE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
-        ERROR_RE = re.compile(r"(error|err):", re.IGNORECASE)
-        WARNING_RE = re.compile(r"(warning|warn):", re.IGNORECASE)
-        NOTE_RE = re.compile(r"(note):", re.IGNORECASE)
-        CANDIDATE_RE = re.compile(r"(candidate):", re.IGNORECASE)
-        SQUIGLE_RE = re.compile(r"([\^~]+)")
-        FILE_RE = re.compile(r"(/.*?/.*?):(\d*)(?:(:)(\d*))?")
-        PROGRESS_RE = re.compile(r"^\[(\d+)/(\d*)\] ")
+            ERROR_RE = re.compile(r"(error|err):", re.IGNORECASE)
+            WARNING_RE = re.compile(r"(warning|warn):", re.IGNORECASE)
+            NOTE_RE = re.compile(r"(note):", re.IGNORECASE)
+            CANDIDATE_RE = re.compile(r"(candidate):", re.IGNORECASE)
+            SQUIGLE_RE = re.compile(r"([\^~]+)")
+            FILE_RE = re.compile(r"(/.*?/.*?):(\d*)(?:(:)(\d*))?")
+            PROGRESS_RE = re.compile(r"^\[(\d+)/(\d*)\] ")
 
-        assert process.stdout is not None
+            assert process.stdout is not None
 
-        lines_to_clear = 0
-        for line in process.stdout:
-            # clear previous lines
-            print("\033[A\033[K" * lines_to_clear, end="")
             lines_to_clear = 0
-            raw_line = ANSI_RE.sub("", line)
+            for line in process.stdout:
+                # clear previous lines
+                print("\033[A\033[K" * lines_to_clear, end="")
+                lines_to_clear = 0
+                raw_line = ANSI_RE.sub("", line)
 
-            # pretty print
-            line = line[:-1]
-            line = ERROR_RE.sub(colored(r"\1", "red") + ":", line)
-            line = WARNING_RE.sub(colored(r"\1", "yellow") + ":", line)
-            line = NOTE_RE.sub(colored(r"\1", "blue") + ":", line)
-            line = CANDIDATE_RE.sub(colored(r"\1", attrs=["bold"]) + ":", line)
-            line = SQUIGLE_RE.sub(colored(r"\1", "cyan"), line)
-            line = FILE_RE.sub(
-                colored(r"\1", "green")
-                + ":"
-                + colored(r"\2", "magenta")
-                + r"\3"
-                + colored(r"\4", "light_grey"),
-                line,
-            )
+                # pretty print
+                line = line[:-1]
+                line = ERROR_RE.sub(colored(r"\1", "red") + ":", line)
+                line = WARNING_RE.sub(colored(r"\1", "yellow") + ":", line)
+                line = NOTE_RE.sub(colored(r"\1", "blue") + ":", line)
+                line = CANDIDATE_RE.sub(colored(r"\1", attrs=["bold"]) + ":", line)
+                line = SQUIGLE_RE.sub(colored(r"\1", "cyan"), line)
+                line = FILE_RE.sub(
+                    colored(r"\1", "green")
+                    + ":"
+                    + colored(r"\2", "magenta")
+                    + r"\3"
+                    + colored(r"\4", "light_grey"),
+                    line,
+                )
 
-            print(line)
-            terminal_width = os.get_terminal_size().columns
+                print(line)
+                terminal_width = os.get_terminal_size().columns
 
-            if PROGRESS_RE.match(raw_line):
-                try:
-                    printed_line = ANSI_RE.sub("", line)
-                    lines_to_clear = math.ceil(len(printed_line) / terminal_width)
-                except OSError:
-                    pass
+                if PROGRESS_RE.match(raw_line):
+                    try:
+                        printed_line = ANSI_RE.sub("", line)
+                        lines_to_clear = math.ceil(len(printed_line) / terminal_width)
+                    except OSError:
+                        pass
 
-        process.poll()
+        return_code = process.poll() or 0
+    except KeyboardInterrupt:
+        print(f"\n{colored('error', 'red')}: Interrupted by user")
+        return_code = 1
+
+    return return_code
 
 
 @tag_func
@@ -603,7 +617,14 @@ def tidy(config: Config) -> None:
 
 
 def main() -> Any:
-    executables = [app.parts[-1] for app in get_apps()]
+    raw_executables = [app.parts[-1] for app in get_apps()]
+
+    executables: dict[str, list[str]] = {}
+    for executable in raw_executables:
+        year, day = executable.split("_")
+        if year not in executables:
+            executables[year] = []
+        executables[year].append(day)
 
     if len(sys.argv) == 1:
         if Config.exists():

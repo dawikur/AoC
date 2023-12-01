@@ -40,7 +40,7 @@ configure_file(config.tpp include/aod/config.hpp)
 # ##############################################################################
 # AoD
 
-add_library(AoD INTERFACE include/aod/primitives.hpp)
+add_library(AoD INTERFACE)
 
 target_compile_features(AoD INTERFACE cxx_std_20)
 set_target_properties(AoD PROPERTIES CXX_EXTENSIONS OFF)
@@ -110,12 +110,13 @@ else()
   message(WARNING "Unknown platform [${CMAKE_SYSTEM_NAME}]")
 endif()
 
+target_include_directories(AoD INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(AoD INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 # ##############################################################################
 # solutions
 
-set(SOLUTIONS ${CMAKE_CURRENT_SOURCE_DIR}/aod)
+set(SOLUTIONS ${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(
   GLOB AOD_YEARS
   RELATIVE ${SOLUTIONS}/
