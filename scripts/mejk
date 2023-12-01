@@ -1,0 +1,625 @@
+#!/usr/bin/env python3
+# Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
+
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import multiprocessing
+import os
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any, Callable, TypeVar
+
+from termcolor import colored
+
+NPROC = multiprocessing.cpu_count()
+
+SCRIPT_FILE = Path(__file__).resolve()
+SCRIPTS_DIR = SCRIPT_FILE.parent
+REPO_DIR = Path(
+    subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    .decode("UTF-8")
+    .strip()
+)
+
+BUILD_DIR = REPO_DIR / ".build"
+APPS_DIR = BUILD_DIR / "src" / "apps"
+
+T = TypeVar("T")
+
+
+def parse_arguments(
+    argv: list[str], executables: list[str]
+) -> tuple[argparse.Namespace, list[str]]:
+    parser = argparse.ArgumentParser(
+        description="Wrapper for cmake", formatter_class=argparse.RawTextHelpFormatter
+    )
+
+    commands = parser.add_subparsers(title="commands", metavar="")
+
+    # apps
+    for index, executable in enumerate(executables):
+        PADDING = f"\n\n" if index == len(executables) - 1 else ""
+
+        def func(name: str) -> Callable[..., Any]:
+            return lambda args, kwargs: app(name, args, kwargs)
+
+        # app
+        command_app = commands.add_parser(
+            executable, help=f"run {executable} app{PADDING}", add_help=False
+        )
+        if command_app:
+            command_app.set_defaults(func=func(executable))
+
+    # build
+    command_build = commands.add_parser(
+        "build",
+        aliases=["b"],
+        help="build (default)",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    if command_build:
+        command_build.set_defaults(func=build_main)
+
+        target = command_build.add_argument_group("target")
+        if target:
+            RESET_INDENT = "\b" * 15
+
+            target.add_argument(
+                "target",
+                nargs="?",
+                default=None,
+                metavar="",
+                choices=["test", "tidy", "coverage"],
+                help=(
+                    f"{RESET_INDENT}               build code w/o tests (default)\n"
+                    f"{RESET_INDENT}test           run tests validation (release)\n"
+                    f"{RESET_INDENT}tidy           run code validation (debug)\n"
+                    f"{RESET_INDENT}coverage       perform coverage test (debug)\n"
+                ),
+            )
+
+        compiler = command_build.add_argument_group(
+            "compiler"
+        ).add_mutually_exclusive_group()
+        if compiler:
+            compiler.add_argument(
+                "--gcc", nargs="?", const="", help="compile using gcc"
+            )
+            compiler.add_argument(
+                "--clang", nargs="?", const="", help="compile using clang"
+            )
+
+        build_type = command_build.add_argument_group(
+            "build_type"
+        ).add_mutually_exclusive_group()
+        if build_type:
+            build_type.add_argument(
+                "--debug",
+                action="store_const",
+                const="Debug",
+                dest="build_type",
+                help="compile in debug mode",
+            )
+            build_type.add_argument(
+                "--release",
+                action="store_const",
+                const="Release",
+                dest="build_type",
+                help="compile in release mode",
+            )
+
+        sanitizer = command_build.add_argument_group(
+            "sanitizer"
+        ).add_mutually_exclusive_group()
+        if sanitizer:
+            sanitizer.add_argument(
+                "--asan",
+                action="append_const",
+                const="ASan",
+                dest="sanitizer",
+                help="compile with AddressSanitizer",
+            )
+            sanitizer.add_argument(
+                "--ubsan",
+                action="append_const",
+                const="UBSan",
+                dest="sanitizer",
+                help="compile with UndefinedBehaviorSanitizer",
+            )
+            sanitizer.add_argument(
+                "--tsan",
+                action="append_const",
+                const="TSan",
+                dest="sanitizer",
+                help="compile with ThreadSanitizer",
+            )
+
+        command_build.add_argument(
+            "-d", "--dot", help="generate deps graph", action="store_true"
+        )
+
+        command_build.add_argument(
+            "-v", "--verbose", help="increase cmake's output verbosity", action="count"
+        )
+
+    # clean
+    command_clean = commands.add_parser(
+        "clean", aliases=["c"], help="clear build directory"
+    )
+    if command_clean:
+        command_clean.set_defaults(func=clean)
+
+        command_args = command_clean.add_mutually_exclusive_group()
+        if command_args:
+            command_args.add_argument(
+                "-a",
+                "--all",
+                dest="mode",
+                action="store_const",
+                const="all",
+                help="clean all files",
+            )
+            command_args.add_argument(
+                "-r",
+                "--repo",
+                dest="mode",
+                action="store_const",
+                const="repo",
+                help="clean git repository",
+            )
+
+    return parser.parse_known_args(argv)
+
+
+def entry_func(func: Callable[..., T]) -> Callable[..., T]:
+    return func
+
+
+def tag_func(func: Callable[..., T]) -> Callable[..., T]:
+    def tagged_func(*args: Any, **kwargs: Any) -> T:
+        print(
+            f" {colored('[', 'cyan')} {colored(func.__name__, 'blue')} {colored(']', 'cyan')}"
+        )
+
+        return func(*args, **kwargs)
+
+    return tagged_func
+
+
+def run(*args: str, **kwargs: Any) -> str | None:
+    def safe_get(name: str) -> Any:
+        if name in kwargs:
+            return kwargs[name]
+        return None
+
+    if len(args) == 1:
+        if isinstance(args, list):
+            cmd = args
+        else:
+            cmd = args[0].split()
+    else:
+        cmd = [*args]
+
+    capture_output = safe_get("capture_output")
+    env = safe_get("env")
+    new_line = safe_get("new_line")
+
+    print(f" {colored(cmd[0], 'green')} {' '.join(cmd[1:])}")
+
+    if new_line:
+        print("")
+
+    env = {**os.environ, **env} if env else {**os.environ}
+
+    output = subprocess.run(
+        cmd, capture_output=capture_output, check=True, env=env
+    ).stdout
+
+    return output.decode() if output else None
+
+
+def get_apps() -> list[Path]:
+    return sorted(
+        file
+        for file in APPS_DIR.rglob("*")
+        if file.is_file() and (file.stat().st_mode & 0o111)
+    )
+
+
+class Config:
+    __CACHE_FILE = BUILD_DIR / "config.mejk"
+
+    def __init__(self, data: dict[str, Any] | None = None) -> None:
+        self.__data = data if data is not None else {}
+
+    def __getitem__(self, key: str) -> Any:
+        if key in self.__data:
+            return self.__data[key]
+        else:
+            return None
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.__data[key] = value
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.__data
+
+    def __str__(self) -> str:
+        result = []
+
+        lhs_size = max([len("config")] + [len(key) for key in self.__data]) + 1
+
+        tag_str = f"{'config':>{lhs_size}}"
+        result.append(f"{colored(tag_str, 'cyan')}:")
+
+        for lhs, rhs in self.__data.items():
+            lhs_str = f"{lhs:>{lhs_size}}"
+            rhs_str = f"{rhs}"
+            result.append(f"{colored(lhs_str, 'yellow')}: {rhs_str}")
+
+        return "\n".join(result)
+
+    @classmethod
+    def exists(cls) -> bool:
+        return cls.__CACHE_FILE.exists()
+
+    @classmethod
+    def load(cls) -> Config | None:
+        if not cls.exists():
+            return None
+
+        with open(cls.__CACHE_FILE) as cache_file:
+            return Config(json.loads(cache_file.read()))
+
+    def save(self) -> None:
+        with open(self.__CACHE_FILE, "w") as cache_file:
+            cache_file.write(json.dumps(self.__data))
+
+
+@entry_func
+@tag_func
+def app(
+    executable: str, arguments: argparse.Namespace, remained_args: list[str]
+) -> int:
+    try:
+        apps = get_apps()
+        app = [app for app in apps if app.parts[-1] == executable][0]
+
+        run(f"{app}", *remained_args)
+    except subprocess.CalledProcessError as e:
+        return e.returncode
+
+    return 0
+
+
+@entry_func
+@tag_func
+def clean(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
+    mode = arguments.mode
+
+    run(f"rm", "-rf", str(BUILD_DIR))
+
+    if mode == "all" or mode == "repo":
+        run("git", "clean", "-fdX")
+        run("git", "clean", "-fdx")
+
+    if mode == "repo":
+        run("git", "prune")
+        run("git", "gc", "--force")
+        run("rm", "-rf", str(REPO_DIR / ".git" / "gc.log"))
+
+    return 0
+
+
+@entry_func
+def build_main(arguments: argparse.Namespace, remained_args: list[str]) -> int:
+    config = parse_config(arguments)
+
+    if config is None:
+        return 1
+
+    cached_config = Config.load() if Config.exists() else None
+    if config != cached_config:
+        configure(config)
+
+    config.save()
+
+    return evaluate(config, remained_args)
+
+
+@tag_func
+def parse_config(arguments: argparse.Namespace) -> Config | None:
+    if arguments.target == "coverage" and arguments.clang is not None:
+        print(
+            f"{colored('error', 'red')}: target 'coverage' is not allowed with option '--clang'"
+        )
+        return None
+
+    if arguments.target == "tidy" and arguments.gcc is not None:
+        print(
+            f"{colored('error', 'red')}: target 'tidy' is not allowed with option '--gcc'"
+        )
+        return None
+
+    config = Config(
+        {
+            "env": {
+                "CC": "gcc-10",
+                "CXX": "g++-10",
+            },
+            "target": arguments.target,
+        }
+    )
+
+    if arguments.target in ["test", "coverage"] or arguments.gcc is not None:
+        version = f"{arguments.gcc}" if arguments.gcc else "10"
+
+        config["env"]["CC"] = f"gcc-{version}"
+        config["env"]["CXX"] = f"g++-{version}"
+
+        config["compiler"] = f"gcc-{version}"
+
+    if arguments.target in ["tidy"] or arguments.clang is not None:
+        version = f"{arguments.clang}" if arguments.clang else "15"
+
+        config["env"]["CC"] = f"clang-{version}"
+        config["env"]["CXX"] = f"clang++-{version}"
+
+        config["compiler"] = f"clang-{version}"
+        config["tidy"] = f"clang-tidy-{version}".lower()
+
+    default_build_type = arguments.build_type
+
+    targets: dict[str | None, list[str | None]] = {
+        None: [default_build_type, None],
+        "build": [default_build_type, None],
+        "test": [default_build_type or "Release", "Unit"],
+        "tidy": [default_build_type or "Debug", "Unit"],
+        "coverage": [default_build_type or "Debug", "Coverage"],
+    }
+    config["build"], config["tests"] = targets[arguments.target]
+
+    if arguments.sanitizer:
+        config["sanitizer"] = ";".join(arguments.sanitizer)
+
+    if arguments.dot:
+        config["dot"] = arguments.dot
+
+    log_levels: dict[int | None, str] = {
+        None: "NOTICE",
+        #: "ERROR",
+        #: "WARNING",
+        #: "NOTICE",
+        #: "STATUS",
+        1: "VERBOSE",
+        #: "DEBUG",
+        2: "TRACE",
+    }
+    config["log-level"] = log_levels[arguments.verbose]
+
+    return config
+
+
+@tag_func
+def configure(config: Config) -> None:
+    cmd = [
+        "cmake",
+        f"-S={REPO_DIR}",
+        f"-B={BUILD_DIR}",
+        "-G=Ninja",
+        "-Wno-dev",
+    ]
+
+    if config["build"]:
+        cmd += [f"-DCMAKE_BUILD_TYPE={config['build']}"]
+
+    if config["tests"]:
+        cmd += [f"-DBUILD_TESTING={config['tests']}"]
+
+    if config["sanitizer"]:
+        cmd += [f"-DUSE_SANITIZERS={config['sanitizer']}"]
+
+    if config["log-level"]:
+        cmd += [f"--log-level={config['log-level']}"]
+
+    if config["dot"]:
+        cmd += [f"--graphviz={BUILD_DIR}/deps_graph/deps_graph.dot"]
+
+    run(*cmd, env=config["env"])
+
+    if config["dot"]:
+        run(
+            "dot",
+            "-Tpng",
+            "-o",
+            f"{BUILD_DIR}/deps_graph.png",
+            f"{BUILD_DIR}/deps_graph/deps_graph.dot",
+        )
+
+
+@tag_func
+def evaluate(config: Config | None, remained_args: list[str]) -> int:
+    if config is None:
+        return 1
+
+    print(config)
+
+    build(config, remained_args)
+
+    if config["tests"]:
+        test(config)
+
+        if config["tests"] == "Coverage":
+            coverage(config)
+
+    if config["target"] == "tidy":
+        tidy(config)
+
+    return 0
+
+
+@tag_func
+def build(config: Config, remained_args: list[str]) -> None:
+    env = {"CLICOLOR_FORCE": "1", **config["env"], **os.environ}
+
+    cmd = [
+        "cmake",
+        "--build",
+        f"{BUILD_DIR}",
+        "--",
+        f"-j{NPROC}",
+        *remained_args,
+    ]
+
+    print(f" {colored(cmd[0], 'green')} {' '.join(cmd[1:])}")
+
+    return_code = 0
+    with subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        bufsize=1,
+        text=True,
+        env=env,
+    ) as process:
+        ANSI_RE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+
+        ERROR_RE = re.compile(r"(error|err):", re.IGNORECASE)
+        WARNING_RE = re.compile(r"(warning|warn):", re.IGNORECASE)
+        NOTE_RE = re.compile(r"(note):", re.IGNORECASE)
+        CANDIDATE_RE = re.compile(r"(candidate):", re.IGNORECASE)
+        SQUIGLE_RE = re.compile(r"([\^~]+)")
+        FILE_RE = re.compile(r"(/.*?/.*?):(\d*)(?:(:)(\d*))?")
+        PROGRESS_RE = re.compile(r"^\[(\d+)/(\d*)\] ")
+
+        assert process.stdout is not None
+
+        lines_to_clear = 0
+        for line in process.stdout:
+            # clear previous lines
+            print("\033[A\033[K" * lines_to_clear, end="")
+            lines_to_clear = 0
+            raw_line = ANSI_RE.sub("", line)
+
+            # pretty print
+            line = line[:-1]
+            line = ERROR_RE.sub(colored(r"\1", "red") + ":", line)
+            line = WARNING_RE.sub(colored(r"\1", "yellow") + ":", line)
+            line = NOTE_RE.sub(colored(r"\1", "blue") + ":", line)
+            line = CANDIDATE_RE.sub(colored(r"\1", attrs=["bold"]) + ":", line)
+            line = SQUIGLE_RE.sub(colored(r"\1", "cyan"), line)
+            line = FILE_RE.sub(
+                colored(r"\1", "green")
+                + ":"
+                + colored(r"\2", "magenta")
+                + r"\3"
+                + colored(r"\4", "light_grey"),
+                line,
+            )
+
+            print(line)
+            terminal_width = os.get_terminal_size().columns
+
+            if PROGRESS_RE.match(raw_line):
+                try:
+                    printed_line = ANSI_RE.sub("", line)
+                    lines_to_clear = math.ceil(len(printed_line) / terminal_width)
+                except OSError:
+                    pass
+
+        process.poll()
+
+
+@tag_func
+def test(config: Config) -> None:
+    if (BUILD_DIR / "CTestTestfile.cmake").exists():
+        run("ctest", "--test-dir", str(BUILD_DIR), "-VV", "--", f"-j{NPROC}")
+
+
+@tag_func
+def coverage(config: Config) -> None:
+    coverage_dir = BUILD_DIR / "coverage"
+    if coverage_dir.exists():
+        shutil.rmtree(coverage_dir)
+    coverage_dir.mkdir()
+
+    run(
+        "gcovr",
+        f"--root={REPO_DIR}/src",
+        f"--config={REPO_DIR}/.gcovr",
+        f"--html-details={coverage_dir}/index.html",
+        f"--json-summary={coverage_dir}/summary.json",
+        "--json-summary-pretty",
+        f"{REPO_DIR}",
+        new_line=True,
+    )
+
+    with open(f"{coverage_dir}/summary.json") as summary_file:
+        summary = json.load(summary_file)
+
+        line_covered = summary["line_covered"]
+        line_total = summary["line_total"]
+        line_percent = summary["line_percent"]
+
+        line_coverage = f"{line_covered}/{line_total} - {line_percent}%"
+        line_coverage_color = "green" if line_covered == line_total else "red"
+
+        print(
+            f"\t   lines: {colored(line_coverage, line_coverage_color, attrs=['bold'])}"
+        )
+
+        branch_covered = summary["branch_covered"]
+        branch_total = summary["branch_total"]
+        branch_percent = summary["branch_percent"]
+
+        branch_coverage = f"{branch_covered}/{branch_total} - {branch_percent}%"
+        branch_coverage_color = "blue"
+
+        print(
+            f"\tbranches: {colored(branch_coverage, branch_coverage_color, attrs=['bold'])}"
+        )
+        print(f"\t    file:{colored(str(coverage_dir/'index.html'), attrs=['bold'])}")
+
+
+@tag_func
+def tidy(config: Config) -> None:
+    if "tidy" in config:
+        run(
+            "run-clang-tidy",
+            "-clang-tidy-binary",
+            f"{config['tidy']}",
+            f"-j={NPROC}",
+            f"-p={BUILD_DIR}",
+            "-quiet",
+            f"{REPO_DIR}/src",
+            "-extra-arg=-Wno-unknown-warning-option",
+        )
+
+
+def main() -> Any:
+    executables = [app.parts[-1] for app in get_apps()]
+
+    if len(sys.argv) == 1:
+        if Config.exists():
+            return evaluate(Config.load(), [])
+
+        arguments, remained_args = parse_arguments(["build"], executables)
+        return arguments.func(arguments, remained_args)
+
+    arguments, remained_args = parse_arguments(sys.argv[1:], executables)
+
+    if hasattr(arguments, "func"):
+        return arguments.func(arguments, remained_args)
+
+    arguments, remained_args = parse_arguments(["build"], executables)
+    return arguments.func(arguments, remained_args)
+
+
+if __name__ == "__main__":
+    exit(main())

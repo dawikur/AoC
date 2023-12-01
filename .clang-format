@@ -1,0 +1,159 @@
+# Copyright (c) 2019-2023 Dawid Kurek <dawikur@gmail.com>
+#
+# clang-format v12
+# https://releases.llvm.org/12.0.0/tools/clang/docs/ClangFormatStyleOptions.html
+---
+# BasedOnStyle:  Google
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: AcrossComments
+AlignConsecutiveBitFields: AcrossComments
+AlignConsecutiveDeclarations: AcrossComments
+AlignConsecutiveMacros: AcrossComments
+AlignEscapedNewlines: Right
+AlignOperands: AlignAfterOperator
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
+AttributeMacros:
+    - LIBROE_API
+    - ROE_EXPORT
+    - ROE_IMPORT
+BinPackArguments: false
+BinPackParameters: false
+BitFieldColonSpacing: Both
+BraceWrapping:
+    AfterCaseLabel: false
+    AfterClass: true
+    AfterControlStatement: Never
+    AfterEnum: false
+    AfterFunction: true
+    AfterNamespace: false
+    AfterObjCDeclaration: true
+    AfterStruct: true
+    AfterUnion: true
+    AfterExternBlock: false
+    BeforeCatch: false
+    BeforeElse: false
+    BeforeLambdaBody: false
+    BeforeWhile: false
+    IndentBraces: false
+    SplitEmptyFunction: false
+    SplitEmptyRecord: false
+    SplitEmptyNamespace: false
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Custom
+BreakBeforeConceptDeclarations: true
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+BreakStringLiterals: true
+ColumnLimit: 80
+CommentPragmas: '^ pragma:'
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+DeriveLineEnding: false
+DerivePointerAlignment: false
+DisableFormat: false
+EmptyLineBeforeAccessModifier: Always
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros:
+    - for_
+    - for_x
+    - for_yx
+    - for_zyx
+IncludeBlocks: Regroup
+IncludeCategories:
+    - Regex: ^<catch.*> # catch
+      Priority: 1
+    - Regex: ^<.*\.h> # C header
+      Priority: 2
+    - Regex: ^<c.* # C header in C++
+      Priority: 3
+    - Regex: ^<.*\.hpp> # other system header
+      Priority: 5
+    - Regex: ^<.*> # C++ header
+      Priority: 4
+    - Regex: ^"(assert|config|primitives|signal)\.hpp" # base header
+      Priority: 6
+    - Regex: ^"[^/]*\.hpp" # local header
+      Priority: 7
+    - Regex: ^".*\.hpp" # header
+      Priority: 8
+IncludeIsMainRegex: (_test)?$
+IndentCaseBlocks: false
+IndentCaseLabels: true
+IndentExternBlock: NoIndent
+IndentGotoLabels: true
+IndentPPDirectives: AfterHash
+IndentRequires: true
+IndentWidth: 4
+IndentWrappedFunctionNames: true
+InsertTrailingCommas: Wrapped
+KeepEmptyLinesAtTheStartOfBlocks: false
+MacroBlockBegin: ^ROE_*_BEGIN
+MacroBlockEnd: ^ROE_*_END
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+NamespaceMacros:
+    - NAMESPACE
+    - ROE_NAMESPACE
+PenaltyBreakAssignment: 2
+PenaltyBreakBeforeFirstCallParameter: 190
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyBreakTemplateDeclaration: 10
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 600
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: true
+SortUsingDeclarations: true
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: Always
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceBeforeSquareBrackets: true
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard: Latest
+StatementMacros:
+    - DECLARE
+    - OPERATOR
+TabWidth: 4
+TypenameMacros:
+    - PACKED
+UseCRLF: false
+UseTab: ForContinuationAndIndentation
+WhitespaceSensitiveMacros:
