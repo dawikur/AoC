@@ -1,8 +1,7 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <iostream>
-
 #include <aod/file.hpp>
+#include <aod/std.hpp>
 
 int main ()
 {

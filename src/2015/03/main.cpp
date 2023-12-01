@@ -2,12 +2,8 @@
 
 #include <cassert>
 
-#include <iostream>
-#include <string>
-#include <unordered_set>
-#include <utility>
-
 #include <aod/file.hpp>
+#include <aod/std.hpp>
 
 struct Point
 {

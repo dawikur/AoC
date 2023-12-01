@@ -2,14 +2,8 @@
 
 #include <chrono>
 
-#include <iostream>
-#include <limits>
-#include <string>
-#include <tuple>
-#include <vector>
-
-#include "aod/config.hpp"
 #include "aod/file.hpp"
+#include "aod/std.hpp"
 
 int solve_naive (std::vector<std::string> const& lines)
 {
