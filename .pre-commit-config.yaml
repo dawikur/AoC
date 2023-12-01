@@ -1,0 +1,107 @@
+---
+default_stages: [commit]
+exclude: ^3rd_party/
+repos:
+    ###########################################################################
+    # general
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.4.0
+      hooks:
+          - id: check-added-large-files
+          - id: check-ast
+          - id: check-builtin-literals
+          - id: check-executables-have-shebangs
+          - id: check-json
+          - id: check-merge-conflict
+          - id: check-shebang-scripts-are-executable
+          - id: check-toml
+          - id: check-xml
+          - id: check-yaml
+          - id: end-of-file-fixer
+          - id: forbid-new-submodules
+          - id: mixed-line-ending
+          - id: name-tests-test
+          - id: pretty-format-json
+          - id: sort-simple-yaml
+          - id: trailing-whitespace
+          - id: trailing-whitespace
+
+    - repo: https://github.com/jumanjihouse/pre-commit-hooks
+      rev: 3.0.0
+      hooks:
+          - id: markdownlint
+          - id: script-must-have-extension
+          - id: script-must-not-have-extension
+          - id: shellcheck
+
+    ###########################################################################
+    # c++
+    - repo: https://github.com/pre-commit/mirrors-clang-format
+      rev: v12.0.1
+      hooks:
+          - id: clang-format
+
+    ###########################################################################
+    #  python
+    - repo: https://github.com/psf/black
+      rev: 23.1.0
+      hooks:
+          - id: black
+            language_version: python3
+
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v1.0.1
+      hooks:
+          - id: mypy
+            additional_dependencies: [types-termcolor]
+
+    - repo: https://github.com/asottile/pyupgrade
+      rev: v3.3.1
+      hooks:
+          - id: pyupgrade
+
+    - repo: https://github.com/pycqa/isort
+      rev: 5.12.0
+      hooks:
+          - id: isort
+
+    ###########################################################################
+    # yaml
+    - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+      rev: 0.2.2
+      hooks:
+          - id: yamlfmt
+            exclude: |
+                (?x)^(
+                  .clang-*|
+                  .github/
+                )
+
+    ###########################################################################
+    # shell
+    - repo: https://github.com/detailyang/pre-commit-shell
+      rev: 1.0.5
+      hooks:
+          - id: shell-lint
+    - repo: https://github.com/lovesegfault/beautysh
+      rev: v6.2.1
+      hooks:
+          - id: beautysh
+            args: [--tab, --force-function-style=paronly]
+
+    ###########################################################################
+    # vim
+    - repo: https://github.com/Vimjas/vint
+      rev: v0.4a3
+      hooks:
+          - id: vint
+
+    ###########################################################################
+    # cmake
+    - repo: https://github.com/cheshirekow/cmake-format-precommit
+      rev: v0.6.13
+      hooks:
+          - id: cmake-format
+            additional_dependencies: [pyyaml==5.3.1]
+          - id: cmake-lint
+            additional_dependencies: [pyyaml==5.3.1]
