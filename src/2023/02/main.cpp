@@ -1,13 +1,13 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <aod/file.hpp>
-#include <aod/std.hpp>
+#include <aoc/file.hpp>
+#include <aoc/std.hpp>
 
 int main ()
 {
 	int possible_games {};
 	int power_games {};
-	for (auto const& line: aod::read_input (__FILE__)) {
+	for (auto const& line: aoc::read_input (__FILE__)) {
 		int min_red {};
 		int min_green {};
 		int min_blue {};

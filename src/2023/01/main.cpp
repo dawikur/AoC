@@ -2,8 +2,8 @@
 
 #include <chrono>
 
-#include "aod/file.hpp"
-#include "aod/std.hpp"
+#include "aoc/file.hpp"
+#include "aoc/std.hpp"
 
 int solve_naive (std::vector<std::string> const& lines)
 {
@@ -72,7 +72,7 @@ int solve_naive (std::vector<std::string> const& lines)
 
 int main ()
 {
-	auto const lines = aod::read_input (__FILE__);
+	auto const lines = aoc::read_input (__FILE__);
 
 	{
 		auto const begin    = std::chrono::steady_clock::now ();

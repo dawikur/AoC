@@ -2,8 +2,8 @@
 
 #include <cassert>
 
-#include <aod/file.hpp>
-#include <aod/std.hpp>
+#include <aoc/file.hpp>
+#include <aoc/std.hpp>
 
 struct Point
 {
@@ -31,7 +31,7 @@ int main ()
 
 	houses.insert ({});
 
-	std::string const input = aod::read_input (__FILE__) [0];
+	std::string const input = aoc::read_input (__FILE__) [0];
 	for (auto const& c: input) {
 		switch (c) {
 			case '^': ++p.y; break;

@@ -1,11 +1,11 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <aod/file.hpp>
-#include <aod/std.hpp>
+#include <aoc/file.hpp>
+#include <aoc/std.hpp>
 
 int main ()
 {
-	auto const input = aod::read_input (__FILE__) [0];
+	auto const input = aoc::read_input (__FILE__) [0];
 
 	int part1 {};
 	int part2 {};
