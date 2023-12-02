@@ -2,15 +2,15 @@
 
 #include <sstream>
 
-#include <aod/file.hpp>
-#include <aod/std.hpp>
+#include <aoc/file.hpp>
+#include <aoc/std.hpp>
 
 int main ()
 {
 	int sum {};
 	int sum2 {};
 
-	for (auto const& line: aod::read_input (__FILE__)) {
+	for (auto const& line: aoc::read_input (__FILE__)) {
 		std::stringstream ss {line};
 
 		int min = std::numeric_limits<int>::max ();

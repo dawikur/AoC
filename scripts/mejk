@@ -40,26 +40,36 @@ def parse_arguments(
         description="Wrapper for cmake", formatter_class=argparse.RawTextHelpFormatter
     )
 
-    commands = parser.add_subparsers(title="commands", metavar="")
+    commands = parser.add_subparsers(title="years", metavar="")
 
     # years
     for index, year in enumerate(executables):
-        PADDING = f"\n\n" if index == len(executables) - 1 else ""
+        RESET_INDENT = "\b" * 15
+        if index == 0:
+            PADDING = ""
+        elif index == len(executables) - 1:
+            PADDING = f"\n\n{RESET_INDENT}commands:"
+        else:
+            PADDING = ""
 
         def func(name: str) -> Callable[..., Any]:
             return lambda args, kwargs: app(name, args, kwargs)
 
         # year
-        year_app = commands.add_parser(
-            year, help=f"year {year}{PADDING}", add_help=False
+        command_year = commands.add_parser(
+            year,
+            help=f"year {year}{PADDING}",
+            add_help=True,
         )
-        if year_app:
-            year_app.set_defaults(func=func(year))
+        if command_year:
+            command_year.set_defaults(func=func(year))
 
-            year_app.add_argument(
-                "day",
-                choices=executables[year],
-            )
+            day = command_year.add_argument_group("day")
+            if day:
+                day.add_argument(
+                    "day",
+                    choices=executables[year],
+                )
 
     # build
     command_build = commands.add_parser(

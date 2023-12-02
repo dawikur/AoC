@@ -1,10 +1,10 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <aod/file.hpp>
+#include <aoc/file.hpp>
 
 int main ()
 {
-	auto const input = aod::read_input (__FILE__);
+	auto const input = aoc::read_input (__FILE__);
 
 	int paper  = 0;
 	int ribbon = 0;
