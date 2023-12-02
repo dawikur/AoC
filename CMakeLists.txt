@@ -79,18 +79,8 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
     target_compile_definitions(AoC INTERFACE IS_CLANG=1)
 
     target_compile_options(
-      AoC
-      INTERFACE -Weverything
-                -Wno-c++98-compat
-                -Wno-c++98-compat-pedantic
-                -Wno-exit-time-destructors # for assert::signal
-                -Wno-global-constructors # for assert::signal, Color::XXX
-                -Wno-gnu-zero-variadic-macro-arguments # for λ macro
-                -Wno-packed # ignore unnecessary packed atribute
-                -Wno-padded # general paddings
-                -Wno-switch-enum # for 'default's in enum
-                -Wno-weak-vtables # for API structs
-                -fcolor-diagnostics)
+      AoC INTERFACE -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic
+                    -fcolor-diagnostics)
   elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_definitions(AoC INTERFACE IS_GNU=1)
 
