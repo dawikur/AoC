@@ -40,7 +40,7 @@ def parse_arguments(
         description="Wrapper for cmake", formatter_class=argparse.RawTextHelpFormatter
     )
 
-    commands = parser.add_subparsers(title="years", metavar="")
+    commands = parser.add_subparsers(title="years", metavar="\033[A")
 
     # years
     for index, year in enumerate(executables):
@@ -58,7 +58,7 @@ def parse_arguments(
         # year
         command_year = commands.add_parser(
             year,
-            help=f"year {year}{PADDING}",
+            help=f"{PADDING}",
             add_help=True,
         )
         if command_year:
