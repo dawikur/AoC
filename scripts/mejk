@@ -28,7 +28,7 @@ REPO_DIR = Path(
 )
 
 BUILD_DIR = REPO_DIR / ".build"
-APPS_DIR = BUILD_DIR / "src" / "apps"
+APPS_DIR = BUILD_DIR / "aoc" / "apps"
 
 T = TypeVar("T")
 

@@ -1,11 +1,11 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <aoc/file.hpp>
-#include <aoc/std.hpp>
+#include <dku/file.hpp>
+#include <dku/std.hpp>
 
 int main ()
 {
-	auto const input = aoc::read_input (__FILE__) [0];
+	auto const input = dku::read_input (__FILE__) [0];
 
 	int part1 {};
 	int part2 {};
