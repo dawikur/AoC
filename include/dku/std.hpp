@@ -2,8 +2,11 @@
 
 #pragma once
 
+#include <cctype>
+
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
