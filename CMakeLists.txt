@@ -106,34 +106,35 @@ target_include_directories(AoC INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
 # ##############################################################################
 # solutions
 
-set(SOLUTIONS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(AOC_SOLUTIONS ${CMAKE_CURRENT_SOURCE_DIR}/aoc)
 file(
   GLOB AOC_YEARS
-  RELATIVE ${SOLUTIONS}/
-  ${SOLUTIONS}/*)
+  RELATIVE ${AOC_SOLUTIONS}/
+  ${AOC_SOLUTIONS}/*)
 
 foreach(aoc_year ${AOC_YEARS})
-  if(IS_DIRECTORY ${SOLUTIONS}/${aoc_year})
+  if(IS_DIRECTORY ${AOC_SOLUTIONS}/${aoc_year})
     file(
       GLOB AOC_DAYS
-      RELATIVE ${SOLUTIONS}/${aoc_year}
-      ${SOLUTIONS}/${aoc_year}/*)
+      RELATIVE ${AOC_SOLUTIONS}/${aoc_year}
+      ${AOC_SOLUTIONS}/${aoc_year}/*)
 
     foreach(aoc_day ${AOC_DAYS})
-      if(IS_DIRECTORY ${SOLUTIONS}/${aoc_year}/${aoc_day})
+      if(IS_DIRECTORY ${AOC_SOLUTIONS}/${aoc_year}/${aoc_day})
         add_executable(${aoc_year}_${aoc_day}
-                       ${SOLUTIONS}/${aoc_year}/${aoc_day}/main.cpp)
+                       ${AOC_SOLUTIONS}/${aoc_year}/${aoc_day}/main.cpp)
 
-        target_include_directories(${aoc_year}_${aoc_day}
-                                   PRIVATE ${SOLUTIONS}/${aoc_year}/${aoc_day})
+        target_include_directories(
+          ${aoc_year}_${aoc_day}
+          PRIVATE ${AOC_SOLUTIONS}/${aoc_year}/${aoc_day})
 
         target_link_libraries(${aoc_year}_${aoc_day} PRIVATE AoC)
 
         set_target_properties(
           ${aoc_year}_${aoc_day}
-          PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/libs"
-                     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/libs"
-                     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/apps")
+          PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/aoc/libs"
+                     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/aoc/libs"
+                     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/aoc/apps")
       endif()
     endforeach()
   endif()

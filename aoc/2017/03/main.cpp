@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-#include <aoc/file.hpp>
-#include <aoc/std.hpp>
+#include <dku/file.hpp>
+#include <dku/std.hpp>
 
 auto const INPUT = 361527;
 

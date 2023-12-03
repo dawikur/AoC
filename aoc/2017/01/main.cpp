@@ -1,11 +1,11 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <aoc/file.hpp>
-#include <aoc/std.hpp>
+#include <dku/file.hpp>
+#include <dku/std.hpp>
 
 int main ()
 {
-	std::string const line = aoc::read_input (__FILE__) [0];
+	std::string const line = dku::read_input (__FILE__) [0];
 	auto const        dpos = line.size () / 2;
 
 	int sum {};

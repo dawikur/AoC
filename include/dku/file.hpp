@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-namespace aoc {
+namespace dku {
 
 std::vector<std::string> read_file (std::ifstream input)
 {
@@ -26,4 +26,4 @@ std::vector<std::string> read_input (std::string const& file)
 	return read_file (std::ifstream {input.string ()});
 }
 
-} // namespace aoc
+} // namespace dku
