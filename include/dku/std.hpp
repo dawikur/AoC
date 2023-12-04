@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include <cassert>
 #include <cctype>
 
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <sstream>
 #include <string>
 #include <tuple>
