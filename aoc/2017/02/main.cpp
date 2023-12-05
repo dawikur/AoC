@@ -36,4 +36,6 @@ int main ()
 
 	std::cout << "     Checksum: " << sum << std::endl;
 	std::cout << "Even Checksum: " << sum2 << std::endl;
+
+	return 0;
 }

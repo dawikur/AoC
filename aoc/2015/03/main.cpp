@@ -3,31 +3,15 @@
 #include <cassert>
 
 #include <dku/file.hpp>
+#include <dku/point.hpp>
 #include <dku/std.hpp>
-
-struct Point
-{
-	int x {};
-	int y {};
-
-	bool operator== (Point const& p) const { return x == p.x && y == p.y; }
-};
-
-template <>
-struct std::hash<Point>
-{
-	std::size_t operator() (Point const& p) const
-	{
-		return std::hash<int> {}(p.x) ^ (std::hash<int> {}(p.y) << 1);
-	}
-};
 
 int main ()
 {
-	std::unordered_set<Point> houses;
+	std::unordered_set<dku::Point> houses;
 
-	Point p;
-	Point p1;
+	dku::Point p;
+	dku::Point p1;
 
 	houses.insert ({});
 
@@ -47,4 +31,6 @@ int main ()
 	}
 
 	std::cout << "Houses visided: " << houses.size () << std::endl;
+
+	return 0;
 }

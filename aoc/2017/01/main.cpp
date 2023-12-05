@@ -17,4 +17,6 @@ int main ()
 	}
 
 	std::cout << "Captcha: " << sum << std::endl;
+
+	return 0;
 }
