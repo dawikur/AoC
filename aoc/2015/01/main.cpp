@@ -22,4 +22,6 @@ int main ()
 
 	std::cout << "                Last floor: " << part1 << std::endl;
 	std::cout << "Position entering gasement: " << part2 << std::endl;
+
+	return 0;
 }

@@ -49,4 +49,6 @@ int main ()
 
 	std::cout << "Paper: " << paper << std::endl;
 	std::cout << "Ribbon: " << ribbon << std::endl;
+
+	return 0;
 }

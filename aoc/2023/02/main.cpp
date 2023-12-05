@@ -51,4 +51,6 @@ int main ()
 
 	std::cout << "Sum of possible games: " << possible_games << std::endl;
 	std::cout << "  Sum of games' power: " << power_games << std::endl;
+
+	return 0;
 }
