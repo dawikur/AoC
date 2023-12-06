@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <cctype>
+#include <cmath>
 
 #include <iostream>
 #include <limits>
