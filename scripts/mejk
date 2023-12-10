@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import math
 import multiprocessing
@@ -12,6 +13,7 @@ import re
 import shutil
 import subprocess
 import sys
+import textwrap
 from pathlib import Path
 from typing import Any, Callable, TypeVar
 
@@ -70,6 +72,26 @@ def parse_arguments(
                     "day",
                     choices=executables[year],
                 )
+
+    # new
+    command_new = commands.add_parser(
+        "new",
+        aliases=["n"],
+        help="create new app",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    if command_new:
+        command_new.set_defaults(func=new)
+
+        command_new.add_argument(
+            "year",
+            type=int,
+        )
+
+        command_new.add_argument(
+            "day",
+            type=int,
+        )
 
     # build
     command_build = commands.add_parser(
@@ -310,6 +332,40 @@ def app(
         run(f"{app}", *remained_args)
     except subprocess.CalledProcessError as e:
         return e.returncode
+
+    return 0
+
+
+@entry_func
+@tag_func
+def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
+    default_text = f"    // Copyright (c) {datetime.datetime.now().year} Dawid Kurek <dawikur@gmail.com>"
+
+    default_text += """
+
+    #include <dku/file.hpp>
+    #include <dku/std.hpp>
+    #include <dku/string.hpp>
+
+    std::vector<std::string> test_input {
+    };
+
+    int main ()
+    {
+        // auto const input = dku::read_input (__FILE__);
+        auto const input = test_input;
+
+        return 0;
+    }
+    """
+
+    entry_path = REPO_DIR / "src" / str(arguments.year) / str(arguments.day)
+    entry_main = entry_path / "main.cpp"
+    entry_main.parent.mkdir(parents=True, exist_ok=True)
+
+    entry_main.write_text(textwrap.dedent(default_text))
+
+    print(f" {colored('Created', 'green')} {colored(str(entry_main), 'yellow')}")
 
     return 0
 
