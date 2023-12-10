@@ -8,10 +8,10 @@
 
 int main ()
 {
-	std::unordered_set<dku::Point> houses;
+	std::unordered_set<dku::Point<int>> houses;
 
-	dku::Point p;
-	dku::Point p1;
+	dku::Point<int> p;
+	dku::Point<int> p1;
 
 	houses.insert ({});
 

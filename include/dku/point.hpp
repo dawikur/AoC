@@ -4,10 +4,11 @@
 
 namespace dku {
 
+template <class Type>
 struct Point
 {
-	std::int32_t x {};
-	std::int32_t y {};
+	Type x {};
+	Type y {};
 
 	bool operator== (Point const& p) const { return x == p.x && y == p.y; }
 };
@@ -16,12 +17,12 @@ struct Point
 
 namespace std {
 
-template <>
-struct hash<dku::Point>
+template <class Type>
+struct hash<dku::Point<Type>>
 {
-	std::size_t operator() (dku::Point const& p) const
+	std::size_t operator() (dku::Point<Type> const& p) const
 	{
-		return std::hash<int> {}(p.x) ^ (std::hash<int> {}(p.y) << 1);
+		return std::hash<Type> {}(p.x) ^ (std::hash<Type> {}(p.y) << 1);
 	}
 };
 
