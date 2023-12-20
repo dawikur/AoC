@@ -1,10 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku/csi.hpp>
-#include <dku/file.hpp>
-#include <dku/point.hpp>
-#include <dku/std.hpp>
-#include <dku/string.hpp>
+#include <dku.hpp>
 
 dku::Input test_input {
 	"...#......",

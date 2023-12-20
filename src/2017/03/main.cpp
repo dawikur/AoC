@@ -1,11 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <cmath>
-
-#include <iostream>
-
-#include <dku/file.hpp>
-#include <dku/std.hpp>
+#include <dku.hpp>
 
 auto const INPUT = 361527;
 

@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku/file.hpp>
-#include <dku/std.hpp>
+#include <dku.hpp>
 
 auto const test_input_1 = std::vector<std::string> {
 	"RL",

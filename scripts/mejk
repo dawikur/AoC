@@ -343,9 +343,7 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
 
     default_text += """
 
-    #include <dku/file.hpp>
-    #include <dku/std.hpp>
-    #include <dku/string.hpp>
+    #include <dku.hpp>
 
     dku::Input test_input {
     };

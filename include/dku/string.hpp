@@ -2,14 +2,11 @@
 
 #pragma once
 
-#include <string>
-#include <string_view>
-#include <vector>
-
 namespace dku {
 
 std::vector<std::string_view> split (std::string_view const string,
-									 char const             delimiter)
+									 char const             delimiter,
+									 bool const             keep_empty = true)
 {
 	std::vector<std::string_view> result {};
 
@@ -17,13 +14,52 @@ std::vector<std::string_view> split (std::string_view const string,
 	std::size_t end   = string.find (delimiter);
 
 	while (end != std::string::npos) {
-		result.emplace_back (string.substr (begin, end - begin));
+		auto const substr = string.substr (begin, end - begin);
+
+		if (!substr.empty () || keep_empty) { result.emplace_back (substr); }
 
 		begin = end + 1U;
 		end   = string.find (delimiter, begin);
 	}
 
-	result.emplace_back (string.substr (begin));
+	{
+		auto const substr = string.substr (begin);
+		if (!substr.empty () || keep_empty) { result.emplace_back (substr); }
+	}
+
+	return result;
+}
+
+std::string join (std::vector<std::string> const& strings,
+				  std::string const&              delimiter)
+{
+	std::string result;
+
+	if (strings.empty ()) { return result; }
+
+	result += strings [0];
+	for (std::size_t i = 1U; i < strings.size (); ++i) {
+		result += delimiter;
+		result += strings [i];
+	}
+
+	return result;
+}
+
+template <class Type>
+std::vector<Type> split_as (std::string_view const string, char const delimiter)
+{
+	auto const tokens = split (string, delimiter);
+
+	std::vector<Type> result {};
+	result.reserve (tokens.size ());
+
+	for (auto const& token: tokens) {
+		Type value {};
+		std::from_chars (token.data (), token.data () + token.size (), value);
+
+		result.emplace_back (value);
+	}
 
 	return result;
 }

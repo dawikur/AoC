@@ -1,10 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawiku
 
-#include <dku/file.hpp>
-#include <dku/point.hpp>
-#include <dku/rgb.hpp>
-#include <dku/std.hpp>
-#include <dku/string.hpp>
+#include <dku.hpp>
 
 using Map = std::vector<std::string>;
 using Pos = dku::Point<std::size_t>;
@@ -156,12 +152,11 @@ void pretty_print (std::vector<std::string> const&              map,
 
 				auto const rgb = dku::RGB::from_1D (f);
 
-				std::size_t const R = static_cast<std::size_t> (255 * rgb.r);
-				std::size_t const G = static_cast<std::size_t> (255 * rgb.g);
-				std::size_t const B = static_cast<std::size_t> (255 * rgb.b);
-				std::cout << "\033[38;2;" << R << ";" << G << ";" << B << "m";
+				std::cout << dku::term (rgb);
 
-				if (d == max_distance) { std::cout << "\033[5m"; }
+				if (d == max_distance) {
+					std::cout << dku::term (dku::Csi::Reverse);
+				}
 			}
 
 			if (raw) {
@@ -176,7 +171,9 @@ void pretty_print (std::vector<std::string> const&              map,
 					case 'F': std::cout << "╭"; break;
 					case '.': std::cout << " "; break;
 					case ',': std::cout << "⣿"; break;
-					case 'S': std::cout << "\033[5m▒"; break;
+					case 'S':
+						std::cout << dku::term (dku::Csi::Reverse, "▒");
+						break;
 				}
 			}
 
@@ -232,6 +229,7 @@ int main ()
 		if (map [pos.y - 1][pos.x] == 'F') return Dir::Up; // ┘
 
 		assert (false);
+		return Dir::Any;
 	}();
 
 	std::size_t pipe_length = 0;
@@ -269,6 +267,7 @@ int main ()
 		if (map [pos.y - 1][pos.x] == 'F') return Dir::Up; // ┘
 
 		assert (false);
+		return Dir::Any;
 	}();
 	std::size_t inside = 0;
 	do {

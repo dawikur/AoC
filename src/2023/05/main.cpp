@@ -1,8 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku/file.hpp>
-#include <dku/std.hpp>
-#include <dku/string.hpp>
+#include <dku.hpp>
 
 std::vector<std::string> const test_input = {
 	"seeds: 79 14 55 13",

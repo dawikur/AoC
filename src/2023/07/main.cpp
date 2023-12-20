@@ -1,8 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku/file.hpp>
-#include <dku/std.hpp>
-#include <dku/string.hpp>
+#include <dku.hpp>
 
 auto const test_input = std::vector<std::string> {
 	"32T3K 765",

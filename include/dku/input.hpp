@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <dku/std.hpp>
-
 namespace dku {
 
 using Input = std::vector<std::string>;
