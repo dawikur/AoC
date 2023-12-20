@@ -1,7 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku/file.hpp>
-#include <dku/std.hpp>
+#include <dku.hpp>
 
 int main ()
 {

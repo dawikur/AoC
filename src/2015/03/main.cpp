@@ -1,10 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <cassert>
-
-#include <dku/file.hpp>
-#include <dku/point.hpp>
-#include <dku/std.hpp>
+#include <dku.hpp>
 
 int main ()
 {

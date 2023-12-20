@@ -1,9 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <chrono>
-
-#include "dku/file.hpp"
-#include "dku/std.hpp"
+#include <dku.hpp>
 
 int solve_naive (std::vector<std::string> const& lines)
 {
