@@ -1,7 +1,5 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <functional>
-
 namespace dku {
 
 template <class Type>
@@ -12,6 +10,9 @@ struct Point
 
 	bool operator== (Point const& p) const { return x == p.x && y == p.y; }
 };
+
+template <class Type>
+using Points = std::vector<Point<Type>>;
 
 } // namespace dku
 

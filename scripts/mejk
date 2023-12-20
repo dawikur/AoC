@@ -347,7 +347,7 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
     #include <dku/std.hpp>
     #include <dku/string.hpp>
 
-    std::vector<std::string> test_input {
+    dku::Input test_input {
     };
 
     int main ()
@@ -599,10 +599,10 @@ def build(config: Config, remained_args: list[str]) -> int:
                 )
 
                 print(line)
-                terminal_width = os.get_terminal_size().columns
 
                 if PROGRESS_RE.match(raw_line):
                     try:
+                        terminal_width = os.get_terminal_size().columns
                         printed_line = ANSI_RE.sub("", line)
                         lines_to_clear = math.ceil(len(printed_line) / terminal_width)
                     except OSError:
