@@ -2,23 +2,21 @@
 
 #pragma once
 
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
+#include <dku/std.hpp>
 
 namespace dku {
 
-std::vector<std::string> read_file (std::ifstream input)
+using Input = std::vector<std::string>;
+
+Input read_file (std::ifstream input)
 {
-	std::vector<std::string> lines;
-	std::string              line;
+	Input       lines;
+	std::string line;
 	while (std::getline (input, line)) { lines.push_back (line); }
 	return lines;
 }
 
-std::vector<std::string> read_input (std::string const& file)
+Input read_input (std::string const& file)
 {
 	std::filesystem::path const path {file};
 	auto const                  input = path.parent_path () / "input.txt";
