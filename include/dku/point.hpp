@@ -14,6 +14,12 @@ struct Point
 template <class Type>
 using Points = std::vector<Point<Type>>;
 
+template <class Type>
+std::ostream& operator<< (std::ostream& os, Point<Type> const& point)
+{
+	return os << '(' << point.x << ", " << point.y << ')';
+}
+
 } // namespace dku
 
 namespace std {

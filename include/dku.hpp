@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <cctype>
+#include <charconv>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -28,3 +29,5 @@
 #include <dku/rgb.hpp>
 #include <dku/string.hpp>
 #include <dku/term.hpp>
+
+#include "dku/vector.hpp"

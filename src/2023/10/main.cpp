@@ -229,6 +229,7 @@ int main ()
 		if (map [pos.y - 1][pos.x] == 'F') return Dir::Up; // ┘
 
 		assert (false);
+		return Dir::Any;
 	}();
 
 	std::size_t pipe_length = 0;
@@ -266,6 +267,7 @@ int main ()
 		if (map [pos.y - 1][pos.x] == 'F') return Dir::Up; // ┘
 
 		assert (false);
+		return Dir::Any;
 	}();
 	std::size_t inside = 0;
 	do {
