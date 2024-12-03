@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
+// Copyright (c) 2023-2024 Dawid Kurek <dawikur@gmail.com>
 
 #pragma once
 
