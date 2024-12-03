@@ -178,10 +178,6 @@ def parse_arguments(
             )
 
         command_build.add_argument(
-            "-d", "--dot", help="generate deps graph", action="store_true"
-        )
-
-        command_build.add_argument(
             "-v", "--verbose", help="increase cmake's output verbosity", action="count"
         )
 
@@ -391,12 +387,15 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
         day_str = f"0{day_str}"
 
     entry_path = REPO_DIR / "src" / year_str / day_str
-    entry_main = entry_path / "main.cpp"
-    entry_main.parent.mkdir(parents=True, exist_ok=True)
+    entry_path.mkdir(parents=True, exist_ok=True)
 
+    entry_main = entry_path / "main.cpp"
     entry_main.write_text(textwrap.dedent(default_text))
 
-    print(f" {colored('Created', 'green')} {colored(str(entry_main), 'yellow')}")
+    entry_input = entry_path / "input.txt"
+    entry_input.touch()
+
+    print(f" {colored('Created', 'green')} {colored(str(entry_path), 'yellow')}")
 
     return 0
 
@@ -491,9 +490,6 @@ def parse_config(arguments: argparse.Namespace) -> Config | None:
     if arguments.sanitizer:
         config["sanitizer"] = ";".join(arguments.sanitizer)
 
-    if arguments.dot:
-        config["dot"] = arguments.dot
-
     log_levels: dict[int | None, str] = {
         None: "NOTICE",
         #: "ERROR",
@@ -531,19 +527,7 @@ def configure(config: Config) -> None:
     if config["log-level"]:
         cmd += [f"--log-level={config['log-level']}"]
 
-    if config["dot"]:
-        cmd += [f"--graphviz={BUILD_DIR}/deps_graph/deps_graph.dot"]
-
     run(*cmd, env=config["env"])
-
-    if config["dot"]:
-        run(
-            "dot",
-            "-Tpng",
-            "-o",
-            f"{BUILD_DIR}/deps_graph.png",
-            f"{BUILD_DIR}/deps_graph/deps_graph.dot",
-        )
 
 
 @tag_func

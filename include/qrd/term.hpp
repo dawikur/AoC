@@ -25,7 +25,7 @@ enum class Csi
 	White   = 37,
 };
 
-std::string reset ()
+std::string term ()
 {
 	return "\033[0m";
 }
@@ -37,12 +37,12 @@ std::string term (Csi const ansi)
 
 std::string term (Csi const ansi, char const msg)
 {
-	return term (ansi) + msg + reset ();
+	return term (ansi) + msg + term ();
 }
 
 std::string term (Csi const ansi, std::string const& msg)
 {
-	return term (ansi) + msg + reset ();
+	return term (ansi) + msg + term ();
 }
 
 std::string term (std::size_t const RR,
@@ -58,7 +58,7 @@ std::string term (std::size_t const RR,
 				  std::size_t const BB,
 				  char const        msg)
 {
-	return term (RR, GG, BB) + msg + reset ();
+	return term (RR, GG, BB) + msg + term ();
 }
 
 std::string term (std::size_t const  RR,
@@ -66,7 +66,7 @@ std::string term (std::size_t const  RR,
 				  std::size_t const  BB,
 				  std::string const& msg)
 {
-	return term (RR, GG, BB) + msg + reset ();
+	return term (RR, GG, BB) + msg + term ();
 }
 
 std::string term (RGB const& rgb)
@@ -76,7 +76,7 @@ std::string term (RGB const& rgb)
 
 std::string term (RGB const& rgb, std::string const& msg)
 {
-	return term (rgb) + msg + reset ();
+	return term (rgb) + msg + term ();
 }
 
 } // namespace qrd
