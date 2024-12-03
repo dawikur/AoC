@@ -1,8 +1,8 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
-dku::Input test_input {
+qrd::Input test_input {
 	"...#......",
 	".......#..",
 	"#.........",
@@ -15,9 +15,9 @@ dku::Input test_input {
 	"#...#.....",
 };
 
-dku::Point<std::vector<std::size_t>> distance (dku::Input const& lines)
+qrd::Point<std::vector<std::size_t>> distance (qrd::Input const& lines)
 {
-	dku::Point<std::vector<std::size_t>>
+	qrd::Point<std::vector<std::size_t>>
 		result {std::vector<std::size_t> (lines.size (), 1U),
 				std::vector<std::size_t> (lines [0].size (), 1U)};
 
@@ -50,9 +50,9 @@ dku::Point<std::vector<std::size_t>> distance (dku::Input const& lines)
 	return result;
 }
 
-dku::Points<std::size_t> gather (std::vector<std::string> const& lines)
+qrd::Points<std::size_t> gather (std::vector<std::string> const& lines)
 {
-	dku::Points<std::size_t> result {};
+	qrd::Points<std::size_t> result {};
 
 	for (std::size_t i = 0; i < lines.size (); ++i) {
 		for (std::size_t j = 0; j < lines [i].size (); ++j) {
@@ -65,7 +65,7 @@ dku::Points<std::size_t> gather (std::vector<std::string> const& lines)
 
 int main ()
 {
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 	// auto const input = test_input;
 
 	auto distances = distance (input);

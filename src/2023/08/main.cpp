@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 auto const test_input_1 = std::vector<std::string> {
 	"RL",
@@ -93,7 +93,7 @@ std::size_t LCM (std::size_t a, std::size_t b)
 int main ()
 {
 	// auto const input = test_input_3;
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 
 	std::vector<std::size_t> instructions;
 	instructions.reserve (input [0].size ());

@@ -1,10 +1,10 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int main ()
 {
-	auto const input = dku::read_input (__FILE__) [0];
+	auto const input = qrd::read_input (__FILE__) [0];
 
 	int part1 {};
 	int part2 {};

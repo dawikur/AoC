@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 std::vector<std::string> const test_input {
 	"Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53",
@@ -37,7 +37,7 @@ std::size_t check_card (std::string const& card)
 int main ()
 {
 	// auto input = test_input;
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 
 	auto const begin = std::chrono::steady_clock::now ();
 	std::unordered_map<std::size_t, std::size_t> cache {};

@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace dku {
+namespace qrd {
 
 using Input = std::vector<std::string>;
 
@@ -22,4 +22,4 @@ Input read_input (std::string const& file)
 	return read_file (std::ifstream {input.string ()});
 }
 
-} // namespace dku
+} // namespace qrd

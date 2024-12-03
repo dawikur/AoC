@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 auto const INPUT = 361527;
 

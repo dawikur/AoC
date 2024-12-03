@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace dku {
+namespace qrd {
 
 struct RGB
 {
@@ -67,4 +67,4 @@ inline RGB RGB::from_1D (float const f)
 	};
 }
 
-} // namespace dku
+} // namespace qrd

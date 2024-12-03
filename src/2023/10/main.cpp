@@ -1,9 +1,9 @@
 // Copyright (c) 2023 Dawid Kurek <dawiku
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 using Map = std::vector<std::string>;
-using Pos = dku::Point<std::size_t>;
+using Pos = qrd::Point<std::size_t>;
 
 Map test_input {
 	".F----7F7F7F7F-7....",
@@ -150,12 +150,12 @@ void pretty_print (std::vector<std::string> const&              map,
 				auto const f = static_cast<float> (d)
 							 / static_cast<float> (max_distance);
 
-				auto const rgb = dku::RGB::from_1D (f);
+				auto const rgb = qrd::RGB::from_1D (f);
 
-				std::cout << dku::term (rgb);
+				std::cout << qrd::term (rgb);
 
 				if (d == max_distance) {
-					std::cout << dku::term (dku::Csi::Reverse);
+					std::cout << qrd::term (qrd::Csi::Reverse);
 				}
 			}
 
@@ -172,7 +172,7 @@ void pretty_print (std::vector<std::string> const&              map,
 					case '.': std::cout << " "; break;
 					case ',': std::cout << "⣿"; break;
 					case 'S':
-						std::cout << dku::term (dku::Csi::Reverse, "▒");
+						std::cout << qrd::term (qrd::Csi::Reverse, "▒");
 						break;
 				}
 			}
@@ -185,7 +185,7 @@ void pretty_print (std::vector<std::string> const&              map,
 
 int main ()
 {
-	auto map = dku::read_input (__FILE__);
+	auto map = qrd::read_input (__FILE__);
 	// auto map = test_input;
 
 	for (auto& line: map) {
@@ -200,7 +200,7 @@ int main ()
 		std::vector<std::size_t> (map [0].size (),
 								  std::numeric_limits<std::size_t>::max ())};
 
-	dku::Point<std::size_t> start {};
+	qrd::Point<std::size_t> start {};
 	for (std::size_t i = 0; i < map.size (); ++i) {
 		for (std::size_t j = 0; j < map [i].size (); ++j) {
 			if (map [i][j] == 'S') {

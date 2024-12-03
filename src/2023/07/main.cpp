@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 auto const test_input = std::vector<std::string> {
 	"32T3K 765",
@@ -141,13 +141,13 @@ public:
 int main ()
 {
 	// auto const input = test_input;
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 
 	std::vector<Hand> hands;
 	hands.reserve (input.size ());
 
 	for (auto const& line: input) {
-		auto const tokens = dku::split (line, ' ');
+		auto const tokens = qrd::split (line, ' ');
 		hands.emplace_back (tokens [0], std::stoull (std::string (tokens [1])));
 	}
 

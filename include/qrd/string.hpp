@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace dku {
+namespace qrd {
 
 std::vector<std::string_view> split (std::string_view const string,
 									 char const             delimiter,
@@ -30,6 +30,26 @@ std::vector<std::string_view> split (std::string_view const string,
 	return result;
 }
 
+template <class Type>
+std::vector<Type> split_as (std::string_view const string,
+							char const             delimiter,
+							bool const             keep_empty = true)
+{
+	auto const tokens = split (string, delimiter, keep_empty);
+
+	std::vector<Type> result {};
+	result.reserve (tokens.size ());
+
+	for (auto const& token: tokens) {
+		Type value {};
+		std::from_chars (token.data (), token.data () + token.size (), value);
+
+		result.emplace_back (value);
+	}
+
+	return result;
+}
+
 std::string join (std::vector<std::string> const& strings,
 				  std::string const&              delimiter)
 {
@@ -46,22 +66,4 @@ std::string join (std::vector<std::string> const& strings,
 	return result;
 }
 
-template <class Type>
-std::vector<Type> split_as (std::string_view const string, char const delimiter)
-{
-	auto const tokens = split (string, delimiter);
-
-	std::vector<Type> result {};
-	result.reserve (tokens.size ());
-
-	for (auto const& token: tokens) {
-		Type value {};
-		std::from_chars (token.data (), token.data () + token.size (), value);
-
-		result.emplace_back (value);
-	}
-
-	return result;
-}
-
-} // namespace dku
+} // namespace qrd

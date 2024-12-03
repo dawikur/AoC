@@ -1,8 +1,8 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
-dku::Input test_input1 {
+qrd::Input test_input1 {
 	"#.#.### 1,1,3",
 	".#...#....###. 1,1,3",
 	".#.###.#.###### 1,3,1,6",
@@ -11,7 +11,7 @@ dku::Input test_input1 {
 	".###.##....# 3,2,1",
 };
 
-dku::Input test_input2 {
+qrd::Input test_input2 {
 	"???.### 1,1,3",
 	".??..??...?##. 1,1,3",
 	"?#?#?#?#?#?#?#? 1,3,1,6",
@@ -50,15 +50,15 @@ std::vector<int> unfold (std::vector<int> const& summary)
 
 int main ()
 {
-	auto input = dku::read_input (__FILE__);
+	auto input = qrd::read_input (__FILE__);
 	// auto input = test_input2;
 
 	int total = 0;
 	for (auto& line: input) {
-		auto const split = dku::split (line, ' ');
+		auto const split = qrd::split (line, ' ');
 
 		auto map     = std::string (split [0]);
-		auto summary = dku::split_as<int> (split [1], ',');
+		auto summary = qrd::split_as<int> (split [1], ',');
 		summary      = {summary.rbegin (), summary.rend ()};
 
 		// map = unfold(map);

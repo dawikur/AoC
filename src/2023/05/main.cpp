@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 std::vector<std::string> const test_input = {
 	"seeds: 79 14 55 13",
@@ -75,7 +75,7 @@ struct Step
 
 int main ()
 {
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 	// auto const input = test_input;
 
 	State              state {State::Seeds};
@@ -89,7 +89,7 @@ int main ()
 			continue;
 		}
 
-		auto const tokens = dku::split (line, ' ');
+		auto const tokens = qrd::split (line, ' ');
 
 		switch (state) {
 			case State::Seeds: {

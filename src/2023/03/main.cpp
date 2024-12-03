@@ -1,7 +1,7 @@
 //
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 std::vector<std::string> const test_input {"467..114..",
 										   "...*......",
@@ -23,7 +23,7 @@ bool is_symbol (char const token)
 
 int main ()
 {
-	auto input = dku::read_input (__FILE__);
+	auto input = qrd::read_input (__FILE__);
 	// auto input = test_input;
 
 	std::unordered_map<std::size_t,

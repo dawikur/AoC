@@ -91,7 +91,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
                 -fdiagnostics-color=always)
 
     if(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER_EQUAL 11.0)
-      target_compile_options(AoC PUBLIC -fconcepts-diagnostics-depth=3)
+      target_compile_options(AoC INTERFACE -fconcepts-diagnostics-depth=3)
     endif()
   else()
     message(WARNING "Unknown compiler [${CMAKE_CXX_COMPILER_ID}]")

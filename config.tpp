@@ -6,7 +6,7 @@
 
 #include <string_view>
 
-namespace dku {
+namespace qrd {
 
 // static inline constexpr auto const () const noexcept
 
@@ -70,4 +70,4 @@ struct config {
 
 };
 
-} // namespace dku
+} // namespace qrd

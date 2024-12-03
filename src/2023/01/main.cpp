@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int solve_naive (std::vector<std::string> const& lines)
 {
@@ -69,7 +69,7 @@ int solve_naive (std::vector<std::string> const& lines)
 
 int main ()
 {
-	auto const lines = dku::read_input (__FILE__);
+	auto const lines = qrd::read_input (__FILE__);
 
 	{
 		auto const begin    = std::chrono::steady_clock::now ();

@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 std::vector<std::string> test_input {
 	"0 3 6 9 12 15",
@@ -46,7 +46,7 @@ void extrapolate (std::vector<std::int64_t>& sequence)
 int main ()
 {
 	// auto const input = test_input;
-	auto const input = dku::read_input (__FILE__);
+	auto const input = qrd::read_input (__FILE__);
 
 	std::int64_t sum {};
 	for (auto const& line: input) {

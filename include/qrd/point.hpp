@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-namespace dku {
+namespace qrd {
 
 template <class Type>
 struct Point
@@ -20,14 +20,14 @@ std::ostream& operator<< (std::ostream& os, Point<Type> const& point)
 	return os << '(' << point.x << ", " << point.y << ')';
 }
 
-} // namespace dku
+} // namespace qrd
 
 namespace std {
 
 template <class Type>
-struct hash<dku::Point<Type>>
+struct hash<qrd::Point<Type>>
 {
-	std::size_t operator() (dku::Point<Type> const& p) const
+	std::size_t operator() (qrd::Point<Type> const& p) const
 	{
 		return std::hash<Type> {}(p.x) ^ (std::hash<Type> {}(p.y) << 1);
 	}

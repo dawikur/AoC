@@ -1,12 +1,12 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int main ()
 {
 	int possible_games {};
 	int power_games {};
-	for (auto const& line: dku::read_input (__FILE__)) {
+	for (auto const& line: qrd::read_input (__FILE__)) {
 		int min_red {};
 		int min_green {};
 		int min_blue {};

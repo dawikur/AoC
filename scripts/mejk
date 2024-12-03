@@ -340,20 +340,48 @@ def app(
 @tag_func
 def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
     default_text = f"    // Copyright (c) {datetime.datetime.now().year} Dawid Kurek <dawikur@gmail.com>"
-
     default_text += """
 
-    #include <dku.hpp>
+    #include <qrd.hpp>
 
-    dku::Input test_input {
+    // ////////////////////////////////////////////////////////////////////////////
+
+    qrd::Input test_input {
     };
 
-    int main ()
+    // ////////////////////////////////////////////////////////////////////////////
+
+    int part_one (qrd::Input const& input)
     {
-        // auto const input = dku::read_input (__FILE__);
-        auto const input = test_input;
+        (void) input;
 
         return 0;
+    }
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    int part_two (qrd::Input const& input)
+    {
+        (void) input;
+
+        return 0;
+    }
+
+    // ////////////////////////////////////////////////////////////////////////////
+
+    int main (int const argc, char const* const argv[])
+    {
+        auto const args = qrd::parse_args (argc, argv);
+
+        if (!args) {
+            return 1;
+        }
+
+        auto const input = (args->input == qrd::Args::Input::File)
+                             ? qrd::read_input (__FILE__)
+                             : test_input;
+
+        return ((args->part == qrd::Args::Part::One) ? part_one : part_two) (input);
     }
     """
 
@@ -420,8 +448,8 @@ def parse_config(arguments: argparse.Namespace) -> Config | None:
     config = Config(
         {
             "env": {
-                "CC": "gcc-10",
-                "CXX": "g++-10",
+                "CC": "gcc-12",
+                "CXX": "g++-12",
             },
             "target": arguments.target,
         }

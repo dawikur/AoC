@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <dku/rgb.hpp>
+#include <qrd/rgb.hpp>
 
-namespace dku {
+namespace qrd {
 
 enum class Csi
 {
@@ -79,4 +79,4 @@ std::string term (RGB const& rgb, std::string const& msg)
 	return term (rgb) + msg + reset ();
 }
 
-} // namespace dku
+} // namespace qrd

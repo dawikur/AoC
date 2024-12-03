@@ -1,13 +1,13 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int main ()
 {
 	int sum {};
 	int sum2 {};
 
-	for (auto const& line: dku::read_input (__FILE__)) {
+	for (auto const& line: qrd::read_input (__FILE__)) {
 		std::stringstream ss {line};
 
 		int min = std::numeric_limits<int>::max ();

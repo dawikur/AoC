@@ -2,9 +2,6 @@
 
 #pragma once
 
-#include <ostream>
-#include <vector>
-
 template <class Type>
 std::ostream& operator<< (std::ostream& os, std::vector<Type> const& vector)
 {

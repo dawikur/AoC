@@ -1,6 +1,6 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 auto const test_input = std::vector<std::string> {
 	"Time:      7  15   30",
@@ -19,7 +19,7 @@ auto const input_part2 = std::vector<std::string> {
 
 int main ()
 {
-	// auto const input = dku::read_input(__FILE__);
+	// auto const input = qrd::read_input(__FILE__);
 	auto const input = input_part2;
 
 	std::string dummy;

@@ -1,10 +1,10 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int main ()
 {
-	std::string const line = dku::read_input (__FILE__) [0];
+	std::string const line = qrd::read_input (__FILE__) [0];
 	auto const        dpos = line.size () / 2;
 
 	int sum {};

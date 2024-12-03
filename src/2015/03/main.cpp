@@ -1,17 +1,17 @@
 // Copyright (c) 2023 Dawid Kurek <dawikur@gmail.com>
 
-#include <dku.hpp>
+#include <qrd.hpp>
 
 int main ()
 {
-	std::unordered_set<dku::Point<int>> houses;
+	std::unordered_set<qrd::Point<int>> houses;
 
-	dku::Point<int> p;
-	dku::Point<int> p1;
+	qrd::Point<int> p;
+	qrd::Point<int> p1;
 
 	houses.insert ({});
 
-	std::string const input = dku::read_input (__FILE__) [0];
+	std::string const input = qrd::read_input (__FILE__) [0];
 	for (auto const& c: input) {
 		switch (c) {
 			case '^': ++p.y; break;
