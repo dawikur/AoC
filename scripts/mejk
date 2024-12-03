@@ -385,7 +385,12 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
     }
     """
 
-    entry_path = REPO_DIR / "src" / str(arguments.year) / str(arguments.day)
+    year_str = str(arguments.year)
+    day_str = str(arguments.day)
+    if len(day_str) == 1:
+        day_str = f"0{day_str}"
+
+    entry_path = REPO_DIR / "src" / year_str / day_str
     entry_main = entry_path / "main.cpp"
     entry_main.parent.mkdir(parents=True, exist_ok=True)
 
