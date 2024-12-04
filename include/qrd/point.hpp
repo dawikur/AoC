@@ -22,6 +22,47 @@ struct Point
 
 	Point operator* (Type const s) const { return {x * s, y * s}; }
 	Point operator/ (Type const s) const { return {x / s, y / s}; }
+
+	std::vector<Point> neighbours () const
+	{
+		// clang-format off
+		if constexpr (std::is_signed_v<Type>) {
+			return {
+				{x - 1, y - 1}, {x, y - 1}, {x + 1, y - 1},
+				{x - 1, y},                 {x + 1, y},
+				{x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1},
+			};
+		} else if (x == 0) {
+			if (y == 0) {
+				return {
+					/*{x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},*/
+					/*{x - 1, y},    */               {x + 1, y},
+					/*{x - 1, y + 1},*/ {x, y + 1},   {x + 1, y + 1},
+				};
+			} else {
+				return {
+					/*{x - 1, y - 1},*/ {x, y - 1},   {x + 1, y - 1},
+					/*{x - 1, y},    */               {x + 1, y},
+					/*{x - 1, y + 1},*/ {x, y + 1},   {x + 1, y + 1},
+				};
+			}
+		} else {
+			if (y == 0) {
+				return {
+					/*{x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},*/
+					  {x - 1, y},                     {x + 1, y},
+					  {x - 1, y + 1},   {x, y + 1},   {x + 1, y + 1},
+				};
+			} else {
+				return {
+					  {x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},
+					  {x - 1, y},                     {x + 1, y},
+					  {x - 1, y + 1},   {x, y + 1},   {x + 1, y + 1},
+				};
+			}
+		}
+		// clang-format off
+	}
 };
 
 template <class Type>
