@@ -74,6 +74,11 @@ std::string term (RGB const& rgb)
 	return term (rgb.r, rgb.g, rgb.b);
 }
 
+std::string term (RGB const& rgb, char const msg)
+{
+	return term (rgb) + msg + term ();
+}
+
 std::string term (RGB const& rgb, std::string const& msg)
 {
 	return term (rgb) + msg + term ();
