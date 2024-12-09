@@ -4,7 +4,7 @@
 
 int main ()
 {
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 
 	int paper  = 0;
 	int ribbon = 0;

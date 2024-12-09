@@ -16,3 +16,18 @@ std::ostream& operator<< (std::ostream& os, std::unordered_map<Key, Type> const&
 
 	return os;
 }
+
+template <class Type>
+std::ostream& operator<< (std::ostream& os, std::unordered_set<Type> const& set)
+{
+	bool first{true};
+
+	os << '{';
+	for (auto const& value: set) {
+		os << (first ? "" : ", ") << value;
+		first = false;
+	}
+	os << '}';
+
+	return os;
+}

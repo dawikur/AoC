@@ -69,7 +69,7 @@ int solve_naive (std::vector<std::string> const& lines)
 
 int main ()
 {
-	auto const lines = qrd::read_input (__FILE__);
+	auto const lines = qrd::read_file (__FILE__);
 
 	{
 		auto const begin    = std::chrono::steady_clock::now ();

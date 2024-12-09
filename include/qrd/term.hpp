@@ -84,4 +84,20 @@ std::string term (RGB const& rgb, std::string const& msg)
 	return term (rgb) + msg + term ();
 }
 
+std::string term_up(int n = 1) {
+	return "\033[" + std::to_string(n) + "A";
+}
+
+std::string term_down(int n = 1) {
+	return "\033[" + std::to_string(n) + "B";
+}
+
+std::string term_right(int n = 1) {
+	return "\033[" + std::to_string(n) + "C";
+}
+
+std::string term_left(int n = 1) {
+	return "\033[" + std::to_string(n) + "D";
+}
+
 } // namespace qrd

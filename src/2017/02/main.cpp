@@ -7,7 +7,7 @@ int main ()
 	int sum {};
 	int sum2 {};
 
-	for (auto const& line: qrd::read_input (__FILE__)) {
+	for (auto const& line: qrd::read_file (__FILE__)) {
 		std::stringstream ss {line};
 
 		int min = std::numeric_limits<int>::max ();

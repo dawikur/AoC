@@ -14,7 +14,7 @@ Input read_file (std::ifstream input)
 	return lines;
 }
 
-Input read_input (std::string const& file)
+Input read_file (std::string const& file)
 {
 	std::filesystem::path const path {file};
 	auto const                  input = path.parent_path () / "input.txt";

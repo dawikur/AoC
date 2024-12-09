@@ -202,7 +202,7 @@ int main (int const argc, char const* const argv[])
     }
 
     auto const input = (args->input == qrd::Args::Input::File)
-                         ? qrd::read_input (__FILE__)
+                         ? qrd::read_file (__FILE__)
                          : test_input;
 
     return ((args->part == qrd::Args::Part::One) ? part_one : part_two) (input);

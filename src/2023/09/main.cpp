@@ -46,7 +46,7 @@ void extrapolate (std::vector<std::int64_t>& sequence)
 int main ()
 {
 	// auto const input = test_input;
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 
 	std::int64_t sum {};
 	for (auto const& line: input) {

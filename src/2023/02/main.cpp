@@ -6,7 +6,7 @@ int main ()
 {
 	int possible_games {};
 	int power_games {};
-	for (auto const& line: qrd::read_input (__FILE__)) {
+	for (auto const& line: qrd::read_file (__FILE__)) {
 		int min_red {};
 		int min_green {};
 		int min_blue {};

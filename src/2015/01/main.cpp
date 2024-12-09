@@ -4,7 +4,7 @@
 
 int main ()
 {
-	auto const input = qrd::read_input (__FILE__) [0];
+	auto const input = qrd::read_file (__FILE__) [0];
 
 	int part1 {};
 	int part2 {};

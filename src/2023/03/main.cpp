@@ -23,7 +23,7 @@ bool is_symbol (char const token)
 
 int main ()
 {
-	auto input = qrd::read_input (__FILE__);
+	auto input = qrd::read_file (__FILE__);
 	// auto input = test_input;
 
 	std::unordered_map<std::size_t,

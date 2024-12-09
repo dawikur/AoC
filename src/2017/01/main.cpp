@@ -4,7 +4,7 @@
 
 int main ()
 {
-	std::string const line = qrd::read_input (__FILE__) [0];
+	std::string const line = qrd::read_file (__FILE__) [0];
 	auto const        dpos = line.size () / 2;
 
 	int sum {};

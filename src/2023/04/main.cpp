@@ -37,7 +37,7 @@ std::size_t check_card (std::string const& card)
 int main ()
 {
 	// auto input = test_input;
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 
 	auto const begin = std::chrono::steady_clock::now ();
 	std::unordered_map<std::size_t, std::size_t> cache {};

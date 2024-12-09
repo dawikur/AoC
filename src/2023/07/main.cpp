@@ -141,7 +141,7 @@ public:
 int main ()
 {
 	// auto const input = test_input;
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 
 	std::vector<Hand> hands;
 	hands.reserve (input.size ());

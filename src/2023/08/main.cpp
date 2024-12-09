@@ -93,7 +93,7 @@ std::size_t LCM (std::size_t a, std::size_t b)
 int main ()
 {
 	// auto const input = test_input_3;
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 
 	std::vector<std::size_t> instructions;
 	instructions.reserve (input [0].size ());

@@ -65,7 +65,7 @@ qrd::Points<std::size_t> gather (std::vector<std::string> const& lines)
 
 int main ()
 {
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 	// auto const input = test_input;
 
 	auto distances = distance (input);

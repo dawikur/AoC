@@ -342,8 +342,10 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
 
     // ////////////////////////////////////////////////////////////////////////////
 
-    qrd::Input test_input {
+    qrd::Input test_input_one {
     };
+
+    qrd::Input test_input_two = test_input_one;
 
     // ////////////////////////////////////////////////////////////////////////////
 
@@ -369,11 +371,16 @@ def new(arguments: argparse.Namespace, remainder_args: list[str]) -> int:
             return 1;
         }
 
-        auto const input = (args->input == qrd::Args::Input::File)
-                             ? qrd::read_input (__FILE__)
-                             : test_input;
+        auto input = (args->input == qrd::Args::Input::File)
+                       ? qrd::read_file (__FILE__)
+                       : ((args->part == qrd::Args::Part::One) ? test_input_one
+                                                               : test_input_two);
 
-        ((args->part == qrd::Args::Part::One) ? part_one : part_two) (input);
+        if (args->part == qrd::Args::Part::One){
+            part_one(input);
+        } else {
+            part_two(input);
+        }
 
         return 0;
     }

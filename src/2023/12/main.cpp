@@ -50,7 +50,7 @@ std::vector<int> unfold (std::vector<int> const& summary)
 
 int main ()
 {
-	auto input = qrd::read_input (__FILE__);
+	auto input = qrd::read_file (__FILE__);
 	// auto input = test_input2;
 
 	int total = 0;

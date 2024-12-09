@@ -61,8 +61,37 @@ struct Point
 				};
 			}
 		}
-		// clang-format off
+		// clang-format on
 	}
+
+	// clang-format off
+	static std::vector<Point> cardinal ()
+	{
+		return {
+			          {0, -1},
+			{-1,  0},          {1,  0},
+			          {0,  1},
+		};
+	}
+
+	static std::vector<Point> diagonal ()
+	{
+		return {
+			{-1, -1},           {1, -1},
+
+			{-1,  1},           {1,  1},
+		};
+	}
+
+	static std::vector<Point> all ()
+	{
+		return {
+			{-1, -1}, {0, -1}, {1, -1},
+			{-1,  0},          {1,  0},
+			{-1,  1}, {0,  1}, {1,  1},
+		};
+	}
+	// clang-format on
 };
 
 template <class Type>

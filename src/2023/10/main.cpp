@@ -185,7 +185,7 @@ void pretty_print (std::vector<std::string> const&              map,
 
 int main ()
 {
-	auto map = qrd::read_input (__FILE__);
+	auto map = qrd::read_file (__FILE__);
 	// auto map = test_input;
 
 	for (auto& line: map) {

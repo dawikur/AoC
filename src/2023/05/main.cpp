@@ -75,7 +75,7 @@ struct Step
 
 int main ()
 {
-	auto const input = qrd::read_input (__FILE__);
+	auto const input = qrd::read_file (__FILE__);
 	// auto const input = test_input;
 
 	State              state {State::Seeds};

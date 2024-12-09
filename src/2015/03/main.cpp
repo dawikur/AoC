@@ -11,7 +11,7 @@ int main ()
 
 	houses.insert ({});
 
-	std::string const input = qrd::read_input (__FILE__) [0];
+	std::string const input = qrd::read_file (__FILE__) [0];
 	for (auto const& c: input) {
 		switch (c) {
 			case '^': ++p.y; break;

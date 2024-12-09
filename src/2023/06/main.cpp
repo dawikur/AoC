@@ -19,7 +19,7 @@ auto const input_part2 = std::vector<std::string> {
 
 int main ()
 {
-	// auto const input = qrd::read_input(__FILE__);
+	// auto const input = qrd::read_file(__FILE__);
 	auto const input = input_part2;
 
 	std::string dummy;
