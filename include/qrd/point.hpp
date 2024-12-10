@@ -23,49 +23,33 @@ struct Point
 	Point operator* (Type const s) const { return {x * s, y * s}; }
 	Point operator/ (Type const s) const { return {x / s, y / s}; }
 
-	std::vector<Point> neighbours () const
+	template <class NewType>
+	auto as() const
 	{
-		// clang-format off
-		if constexpr (std::is_signed_v<Type>) {
-			return {
-				{x - 1, y - 1}, {x, y - 1}, {x + 1, y - 1},
-				{x - 1, y},                 {x + 1, y},
-				{x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1},
-			};
-		} else if (x == 0) {
-			if (y == 0) {
-				return {
-					/*{x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},*/
-					/*{x - 1, y},    */               {x + 1, y},
-					/*{x - 1, y + 1},*/ {x, y + 1},   {x + 1, y + 1},
-				};
-			} else {
-				return {
-					/*{x - 1, y - 1},*/ {x, y - 1},   {x + 1, y - 1},
-					/*{x - 1, y},    */               {x + 1, y},
-					/*{x - 1, y + 1},*/ {x, y + 1},   {x + 1, y + 1},
-				};
-			}
-		} else {
-			if (y == 0) {
-				return {
-					/*{x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},*/
-					  {x - 1, y},                     {x + 1, y},
-					  {x - 1, y + 1},   {x, y + 1},   {x + 1, y + 1},
-				};
-			} else {
-				return {
-					  {x - 1, y - 1},   {x, y - 1},   {x + 1, y - 1},
-					  {x - 1, y},                     {x + 1, y},
-					  {x - 1, y + 1},   {x, y + 1},   {x + 1, y + 1},
-				};
-			}
-		}
-		// clang-format on
+		return Point<NewType> {static_cast<NewType> (x),
+							   static_cast<NewType> (y)};
+	}
+
+	template <class Data>
+	auto const& get_from (std::vector<Data> const& data) const
+	{
+		auto const p_size = as<std::size_t>();
+
+		return data[p_size.y][p_size.x];
 	}
 
 	// clang-format off
-	static std::vector<Point> cardinal ()
+	template <class Data>
+	bool is_in (std::vector<Data> const& data) const
+	{
+		auto const p_size = as<std::size_t>();
+
+		return !data.empty() &&
+			   0 <= x && p_size.x < data[0].size() &&
+			   0 <= y && p_size.y < data.size();
+	}
+
+	static std::vector<Point> cardinals ()
 	{
 		return {
 			          {0, -1},
@@ -74,7 +58,7 @@ struct Point
 		};
 	}
 
-	static std::vector<Point> diagonal ()
+	static std::vector<Point> diagonals ()
 	{
 		return {
 			{-1, -1},           {1, -1},

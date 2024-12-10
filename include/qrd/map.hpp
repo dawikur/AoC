@@ -31,3 +31,22 @@ std::ostream& operator<< (std::ostream& os, std::unordered_set<Type> const& set)
 
 	return os;
 }
+
+namespace std {
+
+template <class Type>
+struct hash<unordered_set<Type>>
+{
+	std::size_t operator() (unordered_set<Type> const& s) const
+	{
+		std::size_t h{};
+
+		for (auto const& value: s) {
+			h ^= std::hash<Type> {}(value);
+		}
+
+		return h;
+	}
+};
+
+} // namespace std
