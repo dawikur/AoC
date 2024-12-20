@@ -38,6 +38,14 @@ struct Point
 		return data[p_size.y][p_size.x];
 	}
 
+	template <class Data>
+	auto& get_from (std::vector<Data>& data) const
+	{
+		auto const p_size = as<std::size_t>();
+
+		return data[p_size.y][p_size.x];
+	}
+
 	// clang-format off
 	template <class Data>
 	bool is_in (std::vector<Data> const& data) const
