@@ -5,7 +5,7 @@
 namespace qrd {
 
 std::vector<std::string_view> split (std::string_view const string,
-									 char const             delimiter,
+									 char const             delimiter = ' ' ,
 									 bool const             keep_empty = false)
 {
 	std::vector<std::string_view> result {};
@@ -32,7 +32,7 @@ std::vector<std::string_view> split (std::string_view const string,
 
 template <class Type>
 std::vector<Type> split_as (std::string_view const string,
-							char const             delimiter,
+							char const             delimiter = ' ' ,
 							bool const             keep_empty = false)
 {
 	auto const tokens = split (string, delimiter, keep_empty);
